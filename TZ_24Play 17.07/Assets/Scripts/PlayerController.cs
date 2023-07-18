@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _platformFloor;
-    [SerializeField] private MeshRenderer _playerPlatformPrefab;
     [SerializeField] private float sensivity = 1f;
-    private float _platformWidth;
-    private float _playersCubeWidth = 0.5f;
+    [SerializeField] private Transform _platformFloor;
+    [SerializeField] private Transform _playerPlatformPrefab;
+    private float _platformWidthOffset;
+    private float _playersCubeWidthOffset;
 
     private void Awake()
     {
-        _platformWidth = _platformFloor.bounds.extents.x;
-        _playersCubeWidth = _playerPlatformPrefab.bounds.extents.x;
+
+        _platformWidthOffset = _platformFloor.localScale.x * 0.5f;
+        _playersCubeWidthOffset = _playerPlatformPrefab.localScale.x * 0.5f;
     }
 
     private void Update()
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
             {
                 Vector2 touchDeltaPosition = touch.deltaPosition;
                 float newXPosition = transform.position.x - touchDeltaPosition.x * sensivity * Time.deltaTime;
-                float clampedXPosition = Mathf.Clamp(newXPosition, -_platformWidth + _playersCubeWidth, _platformWidth - _playersCubeWidth);
+                float clampedXPosition = Mathf.Clamp(newXPosition, -_platformWidthOffset + _playersCubeWidthOffset, _platformWidthOffset - _playersCubeWidthOffset);
                 transform.position = new Vector3(clampedXPosition, transform.position.y, transform.position.z);
             }
         }
