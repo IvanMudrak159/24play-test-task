@@ -4,29 +4,19 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-    [SerializeField] private List<Transform> _activePlatforms;
-    [SerializeField] private List<Transform> _inactivePlatforms;
-    [SerializeField] private float _platformSpeed = 1f;
-    [SerializeField] private GameObject _platformPrefabs;
+    private List<Transform> _activePlatforms;
     [SerializeField] private Transform _platformFloor;
+    [SerializeField] private List<GameObject> _platformPrefabs;
+    [SerializeField] private int _initialPlatformNumber = 5;
     private float _platformLength;
 
     private void Awake()
     {
         _platformLength = _platformFloor.localScale.z;
         _activePlatforms = new List<Transform>();
-        int childCount = transform.childCount;
-        for (int i = 0; i < childCount; i++)
+        for (int i = 0; i < _initialPlatformNumber; i++)
         {
-            _activePlatforms.Add(transform.GetChild(i));
-        }
-    }
-
-    private void Update()
-    {
-        foreach (Transform _platform in _activePlatforms)
-        {
-            _platform.position += Vector3.forward * _platformSpeed * Time.deltaTime;
+            SpawnActivePlatform(i);
         }
     }
 
@@ -34,41 +24,17 @@ public class PlatformController : MonoBehaviour
     {
         if (other.CompareTag("Finish"))
         {
-            if (_activePlatforms.Count == 0) throw new UnityException("Active platforms is empty. Unable to calculate platform position.");
-            Vector3 platformPosition = (_activePlatforms[_activePlatforms.Count - 1].position.z - _platformLength) * Vector3.forward;
-            Transform platform = GetPlatformFromInactiveList(platformPosition);
-            if (_platformPrefabs != null && platform == null)
-            {
-                platform = Instantiate(_platformPrefabs, platformPosition, Quaternion.identity, transform).transform;
-            }
-
-            DeactivateActivePlatform(_activePlatforms[0]);
-            MovePlatformToActiveList(platform);
+            Destroy(_activePlatforms[0].gameObject);
+            _activePlatforms.RemoveAt(0);
+            SpawnActivePlatform(_initialPlatformNumber++);
         }
     }
 
-    private Transform GetPlatformFromInactiveList(Vector3 position)
+    private void SpawnActivePlatform(int platformCount)
     {
-        if (_inactivePlatforms.Count > 0)
-        {
-            Transform platform = _inactivePlatforms[0];
-            platform.position = position;
-            platform.gameObject.SetActive(true);
-            _inactivePlatforms.RemoveAt(0);
-            return platform;
-        }
-        return null;
-    }
-
-    private void DeactivateActivePlatform(Transform platform)
-    {
-        platform.gameObject.SetActive(false);
-        _inactivePlatforms.Add(platform);
-        _activePlatforms.RemoveAt(0);
-    }
-
-    private void MovePlatformToActiveList(Transform platform)
-    {
+        int randomIndex = Random.Range(0, _platformPrefabs.Count);
+        Transform platform = Instantiate(_platformPrefabs[randomIndex], Vector3.zero, Quaternion.identity, transform).transform;
+        platform.localPosition = -Vector3.forward * platformCount * _platformLength;
         _activePlatforms.Add(platform);
     }
 }
