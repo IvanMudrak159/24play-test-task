@@ -63,9 +63,11 @@ public class PlayerController : MonoBehaviour
         _cubeHolder.position += Vector3.up * (_playersCubeHeight);
         Transform cube = Instantiate(_cubePrefab, Vector3.zero, Quaternion.identity, _cubeHolder).transform;
         cube.localPosition = -Vector3.up * (_playersCubeHeight) * _cubeCount++;
+
         GameObject text = Instantiate(_textPickupPrefab);
         text.transform.position = new Vector3(_characterPart.position.x, _characterPart.position.y, _characterPart.position.z - _playersCubeWidthOffset);
         Destroy(text, _textLifetime);
+        
         _pickupParticle.Play();
     }
 

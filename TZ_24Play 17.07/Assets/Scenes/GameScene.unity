@@ -1522,6 +1522,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 11.16288
       objectReference: {fileID: 0}
+    - target: {fileID: 1496211892273564134, guid: d9ce45b6decb1724584923dfb9761356,
+        type: 3}
+      propertyPath: m_Name
+      value: Figure
+      objectReference: {fileID: 0}
     - target: {fileID: 2076399478334519667, guid: d9ce45b6decb1724584923dfb9761356,
         type: 3}
       propertyPath: m_RootOrder
@@ -3244,7 +3249,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1808876871}
   m_Layer: 0
-  m_Name: LowerPart
+  m_Name: CubeHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
